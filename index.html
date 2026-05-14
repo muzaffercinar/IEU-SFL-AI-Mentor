@@ -3,169 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SFL AI-Shield | Ayşegül ÇINAR</title>
+    <title>SFL Academic Portal | Ayşegül ÇINAR</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        :root { --ieu-blue: #003366; --ieu-orange: #FF8C00; --safe-green: #2ecc71; --danger-red: #e74c3c; --light-bg: #f8fafc; }
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: var(--light-bg); }
+        :root { --ieu-blue: #003366; --ieu-orange: #FF8C00; --bg: #f4f7fa; --text: #2d3748; }
+        body { font-family: 'Inter', 'Segoe UI', sans-serif; margin: 0; background: var(--bg); color: var(--text); }
         
-        /* GİRİŞ EKRANI */
-        #login-screen { height: 100vh; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at center, var(--ieu-blue) 0%, #001226 100%); }
-        .login-card { background: white; padding: 40px; border-radius: 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); text-align: center; width: 420px; border-top: 10px solid var(--ieu-orange); }
-        .instructor-tag { display: inline-block; background: #fff1e0; color: var(--ieu-orange); padding: 5px 15px; border-radius: 15px; font-weight: bold; font-size: 13px; margin-bottom: 20px; border: 1px solid var(--ieu-orange); }
-        
-        input { width: 100%; padding: 14px; margin-bottom: 12px; border: 2px solid #e2e8f0; border-radius: 12px; box-sizing: border-box; outline: none; }
-        .btn { width: 100%; border: none; padding: 15px; border-radius: 12px; cursor: pointer; font-weight: bold; transition: 0.3s; margin-top: 10px; }
-        .btn-student { background: var(--ieu-orange); color: white; }
-        .btn-teacher { background: var(--ieu-blue); color: white; }
-        .btn-demo { background: #64748b; color: white; font-size: 11px; padding: 8px; margin-top: 20px; }
+        /* LOGIN */
+        #login-screen { height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--ieu-blue); }
+        .login-card { background: white; padding: 40px; border-radius: 20px; text-align: center; width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        .btn { cursor: pointer; border: none; border-radius: 10px; font-weight: bold; transition: 0.3s; width: 100%; padding: 12px; margin-top: 10px; }
+        .btn-primary { background: var(--ieu-orange); color: white; }
+        .btn-secondary { background: var(--ieu-blue); color: white; }
+        .btn-demo { background: #e2e8f0; color: #4a5568; font-size: 11px; margin-top: 20px; }
+        input { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #cbd5e0; border-radius: 8px; box-sizing: border-box; }
 
-        /* PANELLER */
-        header { background: var(--ieu-blue); color: white; padding: 15px 40px; border-bottom: 6px solid var(--ieu-orange); display: none; justify-content: space-between; align-items: center; }
-        .main-container { display: none; padding: 25px; gap: 20px; max-width: 1500px; margin: 0 auto; }
-        .card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); flex: 1; display: flex; flex-direction: column; min-height: 600px; }
+        /* HEADER */
+        header { background: white; padding: 15px 50px; display: none; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--ieu-orange); box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
         
-        textarea { flex-grow: 1; border: 2px solid #edf2f7; border-radius: 15px; padding: 20px; font-size: 16px; resize: none; outline: none; background: #fcfcfc; }
-        .badge { display: inline-block; padding: 4px 12px; border-radius: 10px; font-size: 12px; font-weight: bold; margin-bottom: 10px; }
-        .badge-ai { background: #e0f2fe; color: #0369a1; }
-        .badge-teacher { background: #fef3c7; color: #92400e; }
+        /* DASHBOARD */
+        .container { display: none; padding: 30px; gap: 25px; max-width: 1400px; margin: 0 auto; }
+        .card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); flex: 1; }
+        
+        /* LISTS */
+        .task-list { list-style: none; padding: 0; }
+        .task-item { padding: 15px; border: 1px solid #edf2f7; border-radius: 10px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+        .task-item:hover { border-color: var(--ieu-orange); background: #fffaf5; }
+        .status { font-size: 11px; padding: 4px 10px; border-radius: 20px; font-weight: bold; }
+        .status-done { background: #c6f6d5; color: #22543d; }
+        .status-pending { background: #feebc8; color: #744210; }
 
-        .ai-suggestion { background: #f0fdf4; border-left: 4px solid var(--safe-green); padding: 15px; margin-top: 15px; border-radius: 8px; font-size: 14px; }
-        .hidden { display: none; }
-        .teacher-view-item { border: 1px solid #eee; padding: 15px; border-radius: 10px; margin-bottom: 10px; cursor: pointer; transition: 0.2s; }
-        .teacher-view-item:hover { background: #f8fafc; border-color: var(--ieu-orange); }
+        /* EDITOR */
+        textarea { width: 100%; height: 300px; border: 1px solid #e2e8f0; border-radius: 10px; padding: 15px; font-size: 16px; font-family: inherit; resize: none; outline: none; background: #fafafa; }
+        .ai-assist { background: #ebf8ff; border-left: 4px solid #3182ce; padding: 15px; margin-top: 15px; border-radius: 8px; font-size: 13px; }
     </style>
 </head>
 <body>
 
     <div id="login-screen">
         <div class="login-card">
-            <h2 style="color:var(--ieu-blue)">İZMİR ............. ÜNİVERSİTESİ</h2>
-            <div class="instructor-tag">System Owner: Ayşegül ÇINAR</div>
-            <input type="text" id="loginEmail" placeholder="Email Adresiniz">
-            <button class="btn btn-student" onclick="handleLogin('student')">Öğrenci Girişi</button>
-            <button class="btn btn-teacher" onclick="handleLogin('teacher')">Öğretmen Girişi (Ayşegül Çınar)</button>
-            
-            <div style="margin-top:20px; border-top: 1px solid #eee; padding-top:15px;">
-                <button class="btn btn-demo" onclick="fillDemo('student')">Örnek Öğrenci Bilgileriyle Doldur</button>
-                <button class="btn btn-demo" onclick="fillDemo('teacher')">Hoca Bilgileriyle Doldur</button>
-            </div>
+            <h2 style="color:var(--ieu-blue); margin-bottom:5px;">SFL ACADEMIC PORTAL</h2>
+            <p style="font-size:12px; color:#718096; margin-bottom:25px;">Instructor: Ayşegül ÇINAR</p>
+            <input type="text" id="email" placeholder="University Email">
+            <button class="btn btn-primary" onclick="app.login('student')">Student Login</button>
+            <button class="btn btn-secondary" onclick="app.login('teacher')">Instructor Login</button>
+            <button class="btn btn-demo" onclick="app.fillDemo()">Quick Demo (Auto-Fill)</button>
         </div>
     </div>
 
-    <header id="main-header">
+    <header id="header">
         <div>
-            <h2 id="headerTitle" style="margin:0; font-size: 18px;">İZMİR ............. ÜNİVERSİTESİ</h2>
-            <span id="headerUser" style="font-size: 12px; opacity: 0.8;"></span>
+            <h3 style="margin:0; color:var(--ieu-blue);">IEU | SFL Portal</h3>
+            <small id="user-info"></small>
         </div>
-        <button class="btn" style="width: auto; background: rgba(255,255,255,0.1); font-size: 12px; padding: 5px 15px;" onclick="location.reload()">Güvenli Çıkış</button>
+        <div style="text-align:right;">
+            <div style="font-weight:bold;" id="nav-name"></div>
+            <small style="color:var(--ieu-orange)" id="nav-role"></small>
+        </div>
     </header>
 
-    <main class="main-container" id="student-panel">
-        <div class="card">
-            <span class="badge badge-ai">🤖 AI Mentor Aktif</span>
-            <h3 style="margin-top:0">Writing Lab: Draft Phase</h3>
-            <textarea id="essayInput" placeholder="Yazmaya başlayın... AI sizi gerçek zamanlı izliyor."></textarea>
-            <div id="aiFeedback" class="ai-suggestion hidden">
-                <strong>AI Tavsiyesi:</strong> "Very important" yerine "Crucial" kelimesini kullanman akademik puanını artırabilir.
-            </div>
-            <button class="btn btn-student" id="submitBtn" onclick="sendToTeacher()">Düzeltmeleri Bitir ve Ayşegül Hoca'ya Gönder</button>
+    <main class="container" id="student-panel">
+        <div class="card" style="flex: 0.4;">
+            <h3>Academic Task List</h3>
+            <ul class="task-list">
+                <li class="task-item" onclick="app.selectTask(1)">
+                    <div><b>W10: Sustainable Cities</b><br><small>Deadline: 18 May</small></div>
+                    <span class="status status-pending">Pending</span>
+                </li>
+                <li class="task-item" style="opacity:0.6;">
+                    <div><b>W09: Tech in Medicine</b><br><small>Completed</small></div>
+                    <span class="status status-done">Submitted</span>
+                </li>
+            </ul>
         </div>
-        <div class="card">
-            <h3>Gelişim Analizim</h3>
-            <div style="height:250px"><canvas id="studentChart"></canvas></div>
-            <div style="margin-top:20px; font-size:14px; color:#666;">
-                • Son 3 ödevin ortalama dürüstlük puanı: <b>%98.5</b>
+        <div class="card" id="editor-card" style="display:none;">
+            <h3 id="task-title">Assignment Editor</h3>
+            <textarea id="editor" placeholder="Start writing your academic draft..."></textarea>
+            <div class="ai-assist" id="ai-suggestion">
+                <strong>Academic Support:</strong> Sizin için müfredat uyumunu (Alignment) denetliyorum. Yazmaya başlayın.
             </div>
+            <button class="btn btn-primary" onclick="app.submitTask()">Submit to Instructor</button>
         </div>
     </main>
 
-    <main class="main-container" id="teacher-panel">
-        <div class="card" style="flex:0.4;">
-            <h3 style="margin-top:0">Gelen Ödevler (Review)</h3>
-            <div class="teacher-view-item" onclick="loadEssay('Örnek Öğrenci')">
-                <b>Örnek Öğrenci</b><br>
-                <small>B2 Track - 14.05.2026</small><br>
-                <span class="badge badge-ai">Dürüstlük: %99</span>
-            </div>
-            <div class="teacher-view-item" style="opacity:0.5">
-                <b>Can Yılmaz</b><br><small>B2 Track - 13.05.2026</small>
-            </div>
+    <main class="container" id="teacher-panel">
+        <div class="card" style="flex: 0.4;">
+            <h3>Submissions for Review</h3>
+            <ul class="task-list">
+                <li class="task-item" onclick="app.reviewTask('Örnek Öğrenci')">
+                    <div><b>Örnek Öğrenci</b><br><small>W10: Sustainable Cities</small></div>
+                    <span class="status status-done">99% Alignment</span>
+                </li>
+            </ul>
         </div>
         <div class="card">
-            <span class="badge badge-teacher">👩‍🏫 Instructor Review Mode</span>
-            <h3 id="currentStudent">Ödev Detayı: Seçiniz</h3>
-            <div id="essayView" style="padding:15px; background:#f1f5f9; border-radius:12px; flex-grow:1; white-space:pre-wrap;">
-                Lütfen soldan incelenecek ödevi seçin.
+            <h3>Evaluation Module</h3>
+            <div id="review-content" style="padding:20px; background:#f8fafc; border-radius:10px; min-height:200px; margin-bottom:20px;">
+                Select a student to begin review.
             </div>
-            <div style="display:flex; gap:10px; margin-top:20px;">
-                <button class="btn btn-student" onclick="alert('Ödev Onaylandı!')">Onayla ve Notlandır</button>
-                <button class="btn btn-demo" onclick="alert('Öğrenciye iade edildi.')">Düzeltme İste</button>
+            <div style="display:flex; gap:10px;">
+                <button class="btn btn-secondary" onclick="alert('Grade Saved')">Approve & Grade</button>
+                <button class="btn btn-demo" onclick="alert('Returned for Revision')">Request Revision</button>
             </div>
         </div>
     </main>
 
     <script>
-        let currentRole = "";
-
-        function fillDemo(role) {
-            if(role === 'student') {
-                document.getElementById('loginEmail').value = "örneköğrenci@üniversite.edu.tr";
-            } else {
-                document.getElementById('loginEmail').value = "aysegul.cinar@üniversite.edu.tr";
+        const app = {
+            login(role) {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('header').style.display = 'flex';
+                if(role === 'student') {
+                    document.getElementById('student-panel').style.display = 'flex';
+                    document.getElementById('nav-name').innerText = "Örnek Öğrenci";
+                    document.getElementById('nav-role').innerText = "Student (B2)";
+                    document.getElementById('user-info').innerText = "Instructor: Ayşegül ÇINAR";
+                } else {
+                    document.getElementById('teacher-panel').style.display = 'flex';
+                    document.getElementById('nav-name').innerText = "Ayşegül ÇINAR";
+                    document.getElementById('nav-role').innerText = "Academic Instructor";
+                }
+            },
+            fillDemo() {
+                document.getElementById('email').value = "örneköğrenci@üniversite.edu.tr";
+            },
+            selectTask(id) {
+                document.getElementById('editor-card').style.display = 'block';
+                document.getElementById('task-title').innerText = "W10: Sustainable Cities Draft";
+            },
+            submitTask() {
+                alert("Task submitted for Academic Compliance check by Ayşegül Çınar.");
+                location.reload();
+            },
+            reviewTask(name) {
+                document.getElementById('review-content').innerHTML = `
+                    <h4>Student: ${name}</h4>
+                    <p><b>Draft Content:</b> Sustainability in urban areas is not just about technology, it is about people's mindset. Education is the core factor for this transformation...</p>
+                    <hr>
+                    <small style="color:var(--safe-green)"><b>System Check:</b> 99% Syllabus Alignment | No Anomaly Detected.</small>
+                `;
             }
-        }
+        };
 
-        function handleLogin(role) {
-            const email = document.getElementById('loginEmail').value;
-            if(!email) { alert("Lütfen mail giriniz."); return; }
-
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('main-header').style.display = 'flex';
-            
-            if(role === 'student') {
-                currentRole = 'student';
-                document.getElementById('student-panel').style.display = 'flex';
-                document.getElementById('headerUser').innerText = `Öğrenci: Örnek Öğrenci | Mentor: Ayşegül ÇINAR`;
-                initChart('studentChart', [95, 98, 97, 99], [40, 55, 65, 75]);
-            } else {
-                currentRole = 'teacher';
-                document.getElementById('teacher-panel').style.display = 'flex';
-                document.getElementById('headerUser').innerText = `Instructor: Ayşegül ÇINAR (Admin)`;
-            }
-        }
-
-        // Öğrenci Yazarken AI Düzeltmesi
-        document.getElementById('essayInput').addEventListener('input', function(e) {
-            if(this.value.length > 50) {
-                document.getElementById('aiFeedback').classList.remove('hidden');
+        // Yazarken AI desteği
+        document.getElementById('editor').addEventListener('input', function() {
+            if(this.value.length > 30) {
+                document.getElementById('ai-suggestion').innerHTML = "<strong>Academic Support:</strong> 'Important' yerine 'Significant' kullanmanız B2 seviyesi müfredat uyumunu güçlendirir.";
             }
         });
-
-        function sendToTeacher() {
-            alert("Ödeviniz Ayşegül Çınar'ın sistemine başarıyla gönderildi!");
-            location.reload();
-        }
-
-        function loadEssay(student) {
-            document.getElementById('currentStudent').innerText = "Ödev Detayı: " + student;
-            document.getElementById('essayView').innerText = "Sustainable development is the key for future generations. Education plays a crucial role in this process. People must understand the importance of nature and resources...";
-        }
-
-        function initChart(id, integrity, performance) {
-            const ctx = document.getElementById(id).getContext('2d');
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['W1', 'W2', 'W3', 'W4'],
-                    datasets: [
-                        { label: 'Dürüstlük %', data: integrity, borderColor: '#2ecc71', tension: 0.3 },
-                        { label: 'Başarı', data: performance, borderColor: '#FF8C00', tension: 0.3 }
-                    ]
-                },
-                options: { maintainAspectRatio: false }
-            });
-        }
     </script>
 </body>
 </html>
