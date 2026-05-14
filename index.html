@@ -3,107 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SFL Academic Portal | Ayşegül ÇINAR</title>
+    <title>SFL Academic Portal | Instructor: Ayşegül ÇINAR</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        :root { --ieu-blue: #003366; --ieu-orange: #FF8C00; --bg: #f4f7fa; --text: #2d3748; }
+        :root { --ieu-blue: #003366; --ieu-orange: #FF8C00; --bg: #f8fafc; --text: #1e293b; --success: #10b981; }
         body { font-family: 'Inter', 'Segoe UI', sans-serif; margin: 0; background: var(--bg); color: var(--text); }
         
         /* LOGIN */
-        #login-screen { height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--ieu-blue); }
-        .login-card { background: white; padding: 40px; border-radius: 20px; text-align: center; width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
-        .btn { cursor: pointer; border: none; border-radius: 10px; font-weight: bold; transition: 0.3s; width: 100%; padding: 12px; margin-top: 10px; }
-        .btn-primary { background: var(--ieu-orange); color: white; }
+        #login-screen { height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--ieu-blue) 0%, #001a33 100%); }
+        .login-card { background: white; padding: 45px; border-radius: 24px; text-align: center; width: 420px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); border-top: 10px solid var(--ieu-orange); }
+        .btn { cursor: pointer; border: none; border-radius: 12px; font-weight: bold; transition: 0.3s; width: 100%; padding: 14px; margin-top: 12px; font-size: 15px; }
+        .btn-primary { background: var(--ieu-orange); color: white; box-shadow: 0 4px 12px rgba(255,140,0,0.3); }
         .btn-secondary { background: var(--ieu-blue); color: white; }
-        .btn-demo { background: #e2e8f0; color: #4a5568; font-size: 11px; margin-top: 20px; }
-        input { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #cbd5e0; border-radius: 8px; box-sizing: border-box; }
+        .btn-demo { background: #f1f5f9; color: #64748b; font-size: 11px; margin-top: 25px; border: 1px dashed #cbd5e0; }
+        input { width: 100%; padding: 14px; margin-bottom: 12px; border: 2px solid #e2e8f0; border-radius: 12px; box-sizing: border-box; outline: none; transition: 0.2s; }
+        input:focus { border-color: var(--ieu-orange); }
 
         /* HEADER */
-        header { background: white; padding: 15px 50px; display: none; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--ieu-orange); box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        header { background: white; padding: 15px 50px; display: none; justify-content: space-between; align-items: center; border-bottom: 4px solid var(--ieu-orange); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
         
-        /* DASHBOARD */
-        .container { display: none; padding: 30px; gap: 25px; max-width: 1400px; margin: 0 auto; }
-        .card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); flex: 1; }
+        /* CONTAINERS */
+        .container { display: none; padding: 35px; gap: 30px; max-width: 1500px; margin: 0 auto; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); flex: 1; display: flex; flex-direction: column; }
         
-        /* LISTS */
-        .task-list { list-style: none; padding: 0; }
-        .task-item { padding: 15px; border: 1px solid #edf2f7; border-radius: 10px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-        .task-item:hover { border-color: var(--ieu-orange); background: #fffaf5; }
-        .status { font-size: 11px; padding: 4px 10px; border-radius: 20px; font-weight: bold; }
-        .status-done { background: #c6f6d5; color: #22543d; }
-        .status-pending { background: #feebc8; color: #744210; }
+        /* TASK LIST */
+        .task-list { list-style: none; padding: 0; margin-top: 20px; }
+        .task-item { padding: 18px; border: 1px solid #f1f5f9; border-radius: 15px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.2s; }
+        .task-item:hover { border-color: var(--ieu-orange); background: #fffcf9; transform: translateX(5px); }
+        .badge { font-size: 11px; padding: 5px 12px; border-radius: 12px; font-weight: 700; text-transform: uppercase; }
+        .badge-pending { background: #fff7ed; color: #c2410c; }
+        .badge-align { background: #ecfdf5; color: #059669; }
 
         /* EDITOR */
-        textarea { width: 100%; height: 300px; border: 1px solid #e2e8f0; border-radius: 10px; padding: 15px; font-size: 16px; font-family: inherit; resize: none; outline: none; background: #fafafa; }
-        .ai-assist { background: #ebf8ff; border-left: 4px solid #3182ce; padding: 15px; margin-top: 15px; border-radius: 8px; font-size: 13px; }
+        textarea { width: 100%; height: 350px; border: 2px solid #f1f5f9; border-radius: 15px; padding: 20px; font-size: 16px; font-family: inherit; resize: none; outline: none; background: #fafafa; transition: 0.3s; line-height: 1.6; }
+        textarea:focus { background: white; border-color: var(--ieu-blue); }
+        .ai-assist { background: #eff6ff; border-left: 5px solid #3b82f6; padding: 18px; margin-top: 20px; border-radius: 12px; font-size: 14px; color: #1e40af; }
     </style>
 </head>
 <body>
 
     <div id="login-screen">
         <div class="login-card">
-            <h2 style="color:var(--ieu-blue); margin-bottom:5px;">SFL ACADEMIC PORTAL</h2>
-            <p style="font-size:12px; color:#718096; margin-bottom:25px;">Instructor: Ayşegül ÇINAR</p>
-            <input type="text" id="email" placeholder="University Email">
+            <h2 style="color:var(--ieu-blue); margin:0;">SFL ACADEMIC PORTAL</h2>
+            <p style="font-size:13px; color:#64748b; margin: 8px 0 25px 0;">Curriculum Management by <b>Ayşegül ÇINAR</b></p>
+            <input type="text" id="email" placeholder="University Email Address">
             <button class="btn btn-primary" onclick="app.login('student')">Student Login</button>
             <button class="btn btn-secondary" onclick="app.login('teacher')">Instructor Login</button>
-            <button class="btn btn-demo" onclick="app.fillDemo()">Quick Demo (Auto-Fill)</button>
+            <button class="btn btn-demo" onclick="app.fillDemo()">Quick Demo: Auto-Fill Sample Student</button>
         </div>
     </div>
 
     <header id="header">
         <div>
-            <h3 style="margin:0; color:var(--ieu-blue);">IEU | SFL Portal</h3>
-            <small id="user-info"></small>
+            <h3 style="margin:0; color:var(--ieu-blue); letter-spacing: 1px;">IEU | SFL MANAGEMENT</h3>
+            <small id="user-info" style="color: #64748b;"></small>
         </div>
         <div style="text-align:right;">
-            <div style="font-weight:bold;" id="nav-name"></div>
-            <small style="color:var(--ieu-orange)" id="nav-role"></small>
+            <div style="font-weight:800; color: var(--ieu-blue);" id="nav-name"></div>
+            <small style="color:var(--ieu-orange); font-weight: 700;" id="nav-role"></small>
         </div>
     </header>
 
     <main class="container" id="student-panel">
-        <div class="card" style="flex: 0.4;">
-            <h3>Academic Task List</h3>
+        <div class="card" style="flex: 0.35;">
+            <h3 style="margin-top:0;">My Academic Tasks</h3>
             <ul class="task-list">
                 <li class="task-item" onclick="app.selectTask(1)">
-                    <div><b>W10: Sustainable Cities</b><br><small>Deadline: 18 May</small></div>
-                    <span class="status status-pending">Pending</span>
+                    <div><b>W10: Sustainable Cities</b><br><small>Syllabus Match Required</small></div>
+                    <span class="badge badge-pending">Pending</span>
                 </li>
-                <li class="task-item" style="opacity:0.6;">
-                    <div><b>W09: Tech in Medicine</b><br><small>Completed</small></div>
-                    <span class="status status-done">Submitted</span>
+                <li class="task-item" style="opacity:0.7;">
+                    <div><b>W09: Tech Ethics</b><br><small>Academic Review Complete</small></div>
+                    <span class="badge badge-align">98% Alignment</span>
                 </li>
             </ul>
         </div>
         <div class="card" id="editor-card" style="display:none;">
-            <h3 id="task-title">Assignment Editor</h3>
-            <textarea id="editor" placeholder="Start writing your academic draft..."></textarea>
+            <h3 id="task-title" style="margin-top:0; color:var(--ieu-blue);">Submission Workspace</h3>
+            <textarea id="editor" placeholder="Develop your academic response here..."></textarea>
             <div class="ai-assist" id="ai-suggestion">
-                <strong>Academic Support:</strong> Sizin için müfredat uyumunu (Alignment) denetliyorum. Yazmaya başlayın.
+                <strong>Academic Support:</strong> Cümle yapılarınız Ayşegül Çınar tarafından belirlenen B2 müfredat hedefleriyle karşılaştırılıyor.
             </div>
-            <button class="btn btn-primary" onclick="app.submitTask()">Submit to Instructor</button>
+            <button class="btn btn-primary" onclick="app.submitTask()">Submit for Alignment Check</button>
         </div>
     </main>
 
     <main class="container" id="teacher-panel">
-        <div class="card" style="flex: 0.4;">
-            <h3>Submissions for Review</h3>
+        <div class="card" style="flex: 0.35;">
+            <h3 style="margin-top:0;">Student Submissions</h3>
             <ul class="task-list">
                 <li class="task-item" onclick="app.reviewTask('Örnek Öğrenci')">
-                    <div><b>Örnek Öğrenci</b><br><small>W10: Sustainable Cities</small></div>
-                    <span class="status status-done">99% Alignment</span>
+                    <div><b>Örnek Öğrenci</b><br><small>Task: Sustainable Cities</small></div>
+                    <span class="badge badge-align">Uygunluk: 99%</span>
                 </li>
             </ul>
         </div>
         <div class="card">
-            <h3>Evaluation Module</h3>
-            <div id="review-content" style="padding:20px; background:#f8fafc; border-radius:10px; min-height:200px; margin-bottom:20px;">
-                Select a student to begin review.
+            <h3 style="margin-top:0; color:var(--ieu-blue);">Review & Final Grade</h3>
+            <div id="review-content" style="padding:25px; background:#f8fafc; border: 1px solid #e2e8f0; border-radius:15px; min-height:250px; margin-bottom:20px; line-height:1.7;">
+                Select a submission from the list to analyze.
             </div>
-            <div style="display:flex; gap:10px;">
-                <button class="btn btn-secondary" onclick="alert('Grade Saved')">Approve & Grade</button>
-                <button class="btn btn-demo" onclick="alert('Returned for Revision')">Request Revision</button>
+            <div style="display:flex; gap:15px;">
+                <button class="btn btn-secondary" onclick="alert('Student score updated.')">Approve Alignment</button>
+                <button class="btn btn-demo" style="margin:0; flex:1;" onclick="alert('Requested Revision')">Re-Draft Required</button>
             </div>
         </div>
     </main>
@@ -111,17 +114,22 @@
     <script>
         const app = {
             login(role) {
+                const email = document.getElementById('email').value;
+                if(!email && role === 'student') { alert("Please enter email"); return; }
+                
                 document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('header').style.display = 'flex';
+                
                 if(role === 'student') {
                     document.getElementById('student-panel').style.display = 'flex';
                     document.getElementById('nav-name').innerText = "Örnek Öğrenci";
-                    document.getElementById('nav-role').innerText = "Student (B2)";
-                    document.getElementById('user-info').innerText = "Instructor: Ayşegül ÇINAR";
+                    document.getElementById('nav-role').innerText = "STUDENT | B2";
+                    document.getElementById('user-info').innerText = "Supervisor: Ayşegül ÇINAR";
                 } else {
                     document.getElementById('teacher-panel').style.display = 'flex';
                     document.getElementById('nav-name').innerText = "Ayşegül ÇINAR";
-                    document.getElementById('nav-role').innerText = "Academic Instructor";
+                    document.getElementById('nav-role').innerText = "ACADEMIC INSTRUCTOR";
+                    document.getElementById('user-info').innerText = "SFL Program Owner";
                 }
             },
             fillDemo() {
@@ -129,26 +137,30 @@
             },
             selectTask(id) {
                 document.getElementById('editor-card').style.display = 'block';
-                document.getElementById('task-title').innerText = "W10: Sustainable Cities Draft";
+                document.getElementById('task-title').innerText = "W10: Sustainable Cities - Submission";
             },
             submitTask() {
-                alert("Task submitted for Academic Compliance check by Ayşegül Çınar.");
+                alert("Task successfully submitted to Ayşegül Çınar for Final Academic Alignment.");
                 location.reload();
             },
             reviewTask(name) {
                 document.getElementById('review-content').innerHTML = `
-                    <h4>Student: ${name}</h4>
-                    <p><b>Draft Content:</b> Sustainability in urban areas is not just about technology, it is about people's mindset. Education is the core factor for this transformation...</p>
-                    <hr>
-                    <small style="color:var(--safe-green)"><b>System Check:</b> 99% Syllabus Alignment | No Anomaly Detected.</small>
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <h4 style="margin:0;">Student: ${name}</h4>
+                        <span class="badge badge-align" style="font-size:14px;">Uygunluk Skoru: 99%</span>
+                    </div>
+                    <p style="margin-top:20px; color:#475569;"><b>Drafting Content:</b> "Sustainable urban development requires a multidisciplinary approach. Modern education must integrate environmental consciousness into the curriculum to foster significant change..."</p>
+                    <div style="margin-top:20px; padding:12px; background:#f0fdf4; border-radius:10px; border-left:4px solid #10b981; font-size:13px; color:#065f46;">
+                        <b>System Insight:</b> No AI-template match found. Writing speed and lexical choices are highly aligned with the student's historical performance.
+                    </div>
                 `;
             }
         };
 
-        // Yazarken AI desteği
+        // Real-time Support
         document.getElementById('editor').addEventListener('input', function() {
-            if(this.value.length > 30) {
-                document.getElementById('ai-suggestion').innerHTML = "<strong>Academic Support:</strong> 'Important' yerine 'Significant' kullanmanız B2 seviyesi müfredat uyumunu güçlendirir.";
+            if(this.value.length > 25) {
+                document.getElementById('ai-suggestion').innerHTML = "<strong>Academic Insight:</strong> 'Good' yerine 'Beneficial' kullanımı hedeflenen akademik uygunluk (Alignment) skorunuzu yükseltir.";
             }
         });
     </script>
