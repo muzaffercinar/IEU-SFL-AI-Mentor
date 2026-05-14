@@ -3,220 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SFL AI-Shield | Instructor: Ayşegül ÇINAR</title>
+    <title>SFL AI-Shield | Ayşegül ÇINAR</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        :root {
-            --ieu-blue: #003366;
-            --ieu-orange: #FF8C00;
-            --safe-green: #2ecc71;
-            --danger-red: #e74c3c;
-            --light-bg: #f8fafc;
-        }
-
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; background-color: var(--light-bg); overflow-x: hidden; }
+        :root { --ieu-blue: #003366; --ieu-orange: #FF8C00; --safe-green: #2ecc71; --danger-red: #e74c3c; --light-bg: #f8fafc; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; background-color: var(--light-bg); }
         
-        #login-screen {
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: radial-gradient(circle at center, var(--ieu-blue) 0%, #001226 100%);
-        }
-
-        .login-card {
-            background: white;
-            padding: 50px 40px;
-            border-radius: 25px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            text-align: center;
-            width: 420px;
-            border-top: 10px solid var(--ieu-orange);
-        }
-
-        .login-card h2 { color: var(--ieu-blue); margin: 0; font-size: 20px; font-weight: 800; }
+        #login-screen { height: 100vh; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at center, var(--ieu-blue) 0%, #001226 100%); }
+        .login-card { background: white; padding: 45px; border-radius: 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); text-align: center; width: 400px; border-top: 10px solid var(--ieu-orange); }
         .instructor-tag { display: inline-block; background: #fff1e0; color: var(--ieu-orange); padding: 5px 15px; border-radius: 15px; font-weight: bold; font-size: 13px; margin: 15px 0; border: 1px solid var(--ieu-orange); }
         
-        .login-card input {
-            width: 100%;
-            padding: 14px;
-            margin-bottom: 15px;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            box-sizing: border-box;
-            outline: none;
-            font-size: 14px;
-        }
+        input { width: 100%; padding: 14px; margin-bottom: 15px; border: 2px solid #e2e8f0; border-radius: 12px; box-sizing: border-box; outline: none; }
+        .login-btn { width: 100%; background: var(--ieu-orange); color: white; border: none; padding: 15px; border-radius: 12px; cursor: pointer; font-weight: bold; margin-bottom: 10px; transition: 0.3s; }
+        .demo-btn { background: #64748b; font-size: 12px; padding: 8px; }
         
-        .login-btn {
-            width: 100%;
-            background: var(--ieu-orange);
-            color: white;
-            border: none;
-            padding: 15px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 16px;
-            transition: 0.3s;
-        }
-        .login-btn:hover { background: #e67e22; transform: translateY(-2px); }
-
-        #main-header {
-            background: var(--ieu-blue);
-            color: white;
-            padding: 20px 50px;
-            border-bottom: 7px solid var(--ieu-orange);
-            display: none;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .dashboard {
-            display: none;
-            padding: 30px;
-            gap: 25px;
-            max-width: 1450px;
-            margin: 0 auto;
-            animation: slideUp 0.6s ease-out;
-        }
-
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-
-        .workspace, .analysis {
-            flex: 1;
-            background: white;
-            padding: 35px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            display: flex;
-            flex-direction: column;
-            min-height: 650px;
-        }
-
-        textarea {
-            flex-grow: 1;
-            border: 2px solid #edf2f7;
-            border-radius: 15px;
-            padding: 25px;
-            font-size: 17px;
-            line-height: 1.7;
-            resize: none;
-            outline: none;
-            background: #fcfcfc;
-        }
-
-        .security-box {
-            padding: 22px;
-            border-radius: 15px;
-            margin-bottom: 25px;
-            border-left: 7px solid #cbd5e0;
-        }
+        header { background: var(--ieu-blue); color: white; padding: 20px 50px; border-bottom: 7px solid var(--ieu-orange); display: none; justify-content: space-between; align-items: center; }
+        .dashboard { display: none; padding: 30px; gap: 25px; max-width: 1450px; margin: 0 auto; }
+        .workspace, .analysis { flex: 1; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); min-height: 600px; display: flex; flex-direction: column; }
+        textarea { flex-grow: 1; border: 2px solid #edf2f7; border-radius: 15px; padding: 20px; font-size: 16px; resize: none; outline: none; background: #fcfcfc; }
+        .security-box { padding: 20px; border-radius: 12px; margin-bottom: 20px; border-left: 6px solid #cbd5e0; }
         .safe { background: #f0fff4; border-left-color: var(--safe-green); color: #276749; }
         .warning { background: #fff5f5; border-left-color: var(--danger-red); color: #9b2c2c; }
-
-        .feedback-item { padding: 12px; border-bottom: 1px solid #edf2f7; display: flex; justify-content: space-between; }
-        .spinner { border: 4px solid #f3f3f3; border-top: 4px solid var(--ieu-orange); border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; display: inline-block; vertical-align: middle; margin-right: 10px; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .hidden { display: none; }
+        .spinner { border: 3px solid #f3f3f3; border-top: 3px solid var(--ieu-orange); border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; display: inline-block; vertical-align: middle; margin-right: 10px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
     <div id="login-screen">
         <div class="login-card">
-            <h2>İZMİR ............. ÜNİVERSİTESİ</h2>
+            <h2 style="color:var(--ieu-blue)">İZMİR ............. ÜNİVERSİTESİ</h2>
             <div class="instructor-tag">Instructor: Ayşegül ÇINAR</div>
-            <p style="font-size: 13px; color: #666;">Demo Access: use <b>örneköğrenci@üniversite.edu.tr</b></p>
             <input type="text" id="studentEmail" placeholder="Email (örneköğrenci@üniversite.edu.tr)">
             <input type="text" id="studentName" placeholder="Full Name (Örnek Öğrenci)">
             <button class="login-btn" onclick="login()">Enter Writing Lab</button>
+            <button class="login-btn demo-btn" onclick="fillDemo()">AUTO-FILL DEMO (Hızlı Giriş)</button>
         </div>
     </div>
 
     <header id="main-header">
         <div>
-            <h2 style="margin:0; font-size: 19px;">İZMİR ............................. ÜNİVERSİTESİ</h2>
-            <span id="userInfo" style="font-size: 12px; color: #cbd5e0;"></span>
+            <h2 style="margin:0; font-size: 18px;">İZMİR ............................. ÜNİVERSİTESİ</h2>
+            <span id="userInfo" style="font-size: 12px; opacity: 0.8;"></span>
         </div>
-        <div style="text-align: right; border-left: 2px solid rgba(255,255,255,0.2); padding-left: 20px;">
-            <div style="font-size: 15px; font-weight: 700;">Ayşegül ÇINAR</div>
-            <div style="font-size: 11px; color: var(--ieu-orange); font-weight: bold;">Program Owner & Instructor</div>
+        <div style="text-align: right;">
+            <div style="font-size: 15px; font-weight: bold;">Ayşegül ÇINAR</div>
+            <div style="font-size: 11px; color: var(--ieu-orange);">Program Owner</div>
         </div>
     </header>
 
     <main class="dashboard" id="main-dashboard">
         <section class="workspace">
-            <h3 style="color: var(--ieu-blue); margin: 0 0 15px 0;">Student Essay Portal</h3>
-            <div style="background: #ebf8ff; padding: 18px; border-radius: 12px; margin-bottom: 25px; font-size: 14px; border-left: 6px solid var(--ieu-blue);">
-                <strong>Haftalık Ödev:</strong> "The role of education in sustainable development." (Ayşegül Çınar - Section B2)
+            <h3 style="color:var(--ieu-blue)">Writing Workspace</h3>
+            <div style="background:#f0f9ff; padding:15px; border-radius:10px; margin-bottom:20px; font-size:14px; border-left:5px solid var(--ieu-blue)">
+                <strong>Assignment:</strong> Sustainable Cities & Education. (By Ayşegül Çınar)
             </div>
-            <textarea id="essayInput" placeholder="Write your content here... (Copy-Paste Disabled)" onpaste="return false;"></textarea>
-            <button class="login-btn" style="margin-top: 25px;" onclick="analyze()">Submit to Ayşegül Çınar</button>
+            <textarea id="essayInput" placeholder="Start typing... (Paste disabled)" onpaste="return false;"></textarea>
+            <button class="login-btn" style="margin-top:20px" onclick="analyze()">Submit for Review</button>
         </section>
 
         <section class="analysis">
-            <h3 style="color: var(--ieu-blue); margin: 0 0 15px 0;">Integrity & Academic Feedback</h3>
-            
-            <div id="loading" class="hidden"><div class="spinner"></div> Analyzing with AI Integrity Protocols...</div>
+            <h3 style="color:var(--ieu-blue)">Integrity & Progress</h3>
+            <div id="loading" class="hidden"><div class="spinner"></div> Scanning for AI integrity...</div>
             <div id="security-report" class="security-box hidden"></div>
-            <div id="results-container">
-                <p style="text-align: center; color: #a0aec0; margin-top: 50px;">Waiting for student submission...</p>
-            </div>
-
-            <div style="margin-top: auto; height: 200px; padding-top: 15px;">
-                <canvas id="progressChart"></canvas>
-            </div>
+            <div id="results"></div>
+            <div style="margin-top:auto; height:200px"><canvas id="progressChart"></canvas></div>
         </section>
     </main>
 
     <script>
-        let typingStart;
-        document.getElementById('essayInput').addEventListener('input', () => { if (!typingStart) typingStart = new Date(); });
+        // Hızlı Giriş Butonu
+        function fillDemo() {
+            document.getElementById('studentEmail').value = "örneköğrenci@üniversite.edu.tr";
+            document.getElementById('studentName').value = "Örnek Öğrenci";
+        }
 
         function login() {
-            const email = document.getElementById('studentEmail').value;
-            const name = document.getElementById('studentName').value;
+            const email = document.getElementById('studentEmail').value.trim().toLowerCase();
+            const name = document.getElementById('studentName').value.trim();
             
-            if(email === "örneköğrenci@üniversite.edu.tr" && name === "Örnek Öğrenci") {
+            // Kontrolü esnettik: Boşlukları ve büyük/küçük harfi salla, içeriğe bak
+            if(email.includes("örneköğrenci") || (name.toLocaleLowerCase('tr').includes("örnek"))) {
                 document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('main-header').style.display = 'flex';
                 document.getElementById('main-dashboard').style.display = 'flex';
-                document.getElementById('userInfo').innerText = `Student: ${name} | Track: SFL-B2 Intensive`;
-                // Hazır geçmiş verilerle grafik yükle (Müdüre gelişim göstermek için)
-                initChart([98, 97, 99, 0], [45, 62, 70, 0]); 
-            } else { alert("Demo giriş bilgileri: örneköğrenci@üniversite.edu.tr / Örnek Öğrenci"); }
+                document.getElementById('userInfo').innerText = `Student: Örnek Öğrenci | Section: SFL-B2`;
+                initChart([98, 97, 99, 0], [45, 60, 72, 0]);
+            } else {
+                alert("Lütfen demo bilgilerini girin veya AUTO-FILL butonuna basın.");
+            }
         }
 
         function analyze() {
             const input = document.getElementById('essayInput').value.trim();
-            if(input.length < 15) { alert("Please write a meaningful text."); return; }
-
+            if(input.length < 10) return;
             document.getElementById('loading').classList.remove('hidden');
             document.getElementById('security-report').classList.add('hidden');
-            document.getElementById('results-container').innerHTML = "";
 
             setTimeout(() => {
                 document.getElementById('loading').classList.add('hidden');
-                const isGibberish = /[bcdfghjklmnpqrstvwxyz]{6,}/i.test(input);
+                const isGib = /[bcdfghjklmnpqrstvwxyz]{6,}/i.test(input);
                 const report = document.getElementById('security-report');
                 report.classList.remove('hidden');
-
-                if (isGibberish) {
-                    report.className = "security-box warning";
-                    report.innerHTML = `<strong>🛡️ Integrity Alert:</strong> Random characters detected. Instructor Ayşegül Çınar has been alerted.`;
-                    initChart([98, 97, 99, 10], [45, 62, 70, 5]);
-                } else {
-                    report.className = "security-box safe";
-                    report.innerHTML = `<strong>🛡️ Verified:</strong> Content is original. Successfully sent to Ayşegül Çınar.`;
-                    document.getElementById('results-container').innerHTML = `
-                        <div class="feedback-item"><span>Grammar</span> <strong>8.5/10</strong></div>
-                        <div class="feedback-item"><span>Vocabulary Band</span> <strong>B2 Upper</strong></div>
-                        <div class="feedback-item"><span>Instructor Note:</span> <span style="font-size:12px">AI pre-check passed. Awaiting human review.</span></div>
-                    `;
-                    initChart([98, 97, 99, 100], [45, 62, 70, 85]);
+                report.className = `security-box ${isGib ? 'warning' : 'safe'}`;
+                report.innerHTML = isGib ? "<strong>🛡️ Warning:</strong> Anomaly detected." : "<strong>🛡️ Verified:</strong> Human-written.";
+                
+                if(!isGib) {
+                    document.getElementById('results').innerHTML = `<div style="padding:10px; border-bottom:1px solid #eee"><b>Score:</b> 8.8/10</div>`;
+                    initChart([98, 97, 99, 100], [45, 60, 72, 88]);
                 }
-            }, 1500);
+            }, 1200);
         }
 
         function initChart(integrity, achievement) {
@@ -227,13 +124,4 @@
                 data: {
                     labels: ['W1', 'W2', 'W3', 'Current'],
                     datasets: [
-                        { label: 'Integrity %', data: integrity, borderColor: '#2ecc71', tension: 0.3, fill: false },
-                        { label: 'Academic Achievement', data: achievement, borderColor: '#FF8C00', tension: 0.3, fill: false }
-                    ]
-                },
-                options: { maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { boxWidth: 10, font: { size: 10 } } } } }
-            });
-        }
-    </script>
-</body>
-</html>
+                        { label: 'Integrity %', data: integrity, borderColor: '#2ecc71
