@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IEU SFL - AI Mentor Prototip</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <div class="logo-area">
+            <h1>İZMİR EKONOMİ ÜNİVERSİTESİ</h1>
+            <p>Yabancı Diller Yüksekokulu (SFL) AI Destek Sistemi</p>
+        </div>
+    </header>
+
+    <main class="dashboard">
+        <section class="workspace">
+            <h2>Öğrenci Çalışma Alanı (Essay Writing)</h2>
+            <textarea id="essayInput" placeholder="İngilizce paragrafınızı buraya yazınız..."></textarea>
+            <button onclick="analyzeText()" id="analyzeBtn">AI Analizini Başlat</button>
+        </section>
+
+        <section class="analysis">
+            <h2>AI Mentor Geri Bildirimleri</h2>
+            <div id="loading" class="hidden">
+                <div class="spinner"></div>
+                <p>Yapay Zeka müfredatı analiz ediyor...</p>
+            </div>
+            <div id="results" class="results-container"></div>
+            <div class="chart-container">
+                <canvas id="progressChart"></canvas>
+            </div>
+        </section>
+    </main>
+    <script src="app.js"></script>
+</body>
+</html>
