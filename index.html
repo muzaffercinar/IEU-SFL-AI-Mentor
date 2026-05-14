@@ -124,4 +124,13 @@
                 data: {
                     labels: ['W1', 'W2', 'W3', 'Current'],
                     datasets: [
-                        { label: 'Integrity %', data: integrity, borderColor: '#2ecc71
+                        { label: 'Integrity %', data: integrity, borderColor: '#2ecc71', tension: 0.3 },
+                        { label: 'Performance', data: achievement, borderColor: '#FF8C00', tension: 0.3 }
+                    ]
+                },
+                options: { maintainAspectRatio: false }
+            });
+        }
+    </script>
+</body>
+</html>
