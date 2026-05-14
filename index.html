@@ -7,26 +7,33 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root { --ieu-blue: #003366; --ieu-orange: #FF8C00; --safe-green: #2ecc71; --danger-red: #e74c3c; --light-bg: #f8fafc; }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; background-color: var(--light-bg); }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: var(--light-bg); }
         
+        /* GİRİŞ EKRANI */
         #login-screen { height: 100vh; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at center, var(--ieu-blue) 0%, #001226 100%); }
-        .login-card { background: white; padding: 45px; border-radius: 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); text-align: center; width: 400px; border-top: 10px solid var(--ieu-orange); }
-        .instructor-tag { display: inline-block; background: #fff1e0; color: var(--ieu-orange); padding: 5px 15px; border-radius: 15px; font-weight: bold; font-size: 13px; margin: 15px 0; border: 1px solid var(--ieu-orange); }
+        .login-card { background: white; padding: 40px; border-radius: 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); text-align: center; width: 420px; border-top: 10px solid var(--ieu-orange); }
+        .instructor-tag { display: inline-block; background: #fff1e0; color: var(--ieu-orange); padding: 5px 15px; border-radius: 15px; font-weight: bold; font-size: 13px; margin-bottom: 20px; border: 1px solid var(--ieu-orange); }
         
-        input { width: 100%; padding: 14px; margin-bottom: 15px; border: 2px solid #e2e8f0; border-radius: 12px; box-sizing: border-box; outline: none; }
-        .login-btn { width: 100%; background: var(--ieu-orange); color: white; border: none; padding: 15px; border-radius: 12px; cursor: pointer; font-weight: bold; margin-bottom: 10px; transition: 0.3s; }
-        .demo-btn { background: #64748b; font-size: 12px; padding: 8px; }
+        input { width: 100%; padding: 14px; margin-bottom: 12px; border: 2px solid #e2e8f0; border-radius: 12px; box-sizing: border-box; outline: none; }
+        .btn { width: 100%; border: none; padding: 15px; border-radius: 12px; cursor: pointer; font-weight: bold; transition: 0.3s; margin-top: 10px; }
+        .btn-student { background: var(--ieu-orange); color: white; }
+        .btn-teacher { background: var(--ieu-blue); color: white; }
+        .btn-demo { background: #64748b; color: white; font-size: 11px; padding: 8px; margin-top: 20px; }
+
+        /* PANELLER */
+        header { background: var(--ieu-blue); color: white; padding: 15px 40px; border-bottom: 6px solid var(--ieu-orange); display: none; justify-content: space-between; align-items: center; }
+        .main-container { display: none; padding: 25px; gap: 20px; max-width: 1500px; margin: 0 auto; }
+        .card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); flex: 1; display: flex; flex-direction: column; min-height: 600px; }
         
-        header { background: var(--ieu-blue); color: white; padding: 20px 50px; border-bottom: 7px solid var(--ieu-orange); display: none; justify-content: space-between; align-items: center; }
-        .dashboard { display: none; padding: 30px; gap: 25px; max-width: 1450px; margin: 0 auto; }
-        .workspace, .analysis { flex: 1; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); min-height: 600px; display: flex; flex-direction: column; }
         textarea { flex-grow: 1; border: 2px solid #edf2f7; border-radius: 15px; padding: 20px; font-size: 16px; resize: none; outline: none; background: #fcfcfc; }
-        .security-box { padding: 20px; border-radius: 12px; margin-bottom: 20px; border-left: 6px solid #cbd5e0; }
-        .safe { background: #f0fff4; border-left-color: var(--safe-green); color: #276749; }
-        .warning { background: #fff5f5; border-left-color: var(--danger-red); color: #9b2c2c; }
+        .badge { display: inline-block; padding: 4px 12px; border-radius: 10px; font-size: 12px; font-weight: bold; margin-bottom: 10px; }
+        .badge-ai { background: #e0f2fe; color: #0369a1; }
+        .badge-teacher { background: #fef3c7; color: #92400e; }
+
+        .ai-suggestion { background: #f0fdf4; border-left: 4px solid var(--safe-green); padding: 15px; margin-top: 15px; border-radius: 8px; font-size: 14px; }
         .hidden { display: none; }
-        .spinner { border: 3px solid #f3f3f3; border-top: 3px solid var(--ieu-orange); border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; display: inline-block; vertical-align: middle; margin-right: 10px; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .teacher-view-item { border: 1px solid #eee; padding: 15px; border-radius: 10px; margin-bottom: 10px; cursor: pointer; transition: 0.2s; }
+        .teacher-view-item:hover { background: #f8fafc; border-color: var(--ieu-orange); }
     </style>
 </head>
 <body>
@@ -34,98 +41,126 @@
     <div id="login-screen">
         <div class="login-card">
             <h2 style="color:var(--ieu-blue)">İZMİR ............. ÜNİVERSİTESİ</h2>
-            <div class="instructor-tag">Instructor: Ayşegül ÇINAR</div>
-            <input type="text" id="studentEmail" placeholder="Email (örneköğrenci@üniversite.edu.tr)">
-            <input type="text" id="studentName" placeholder="Full Name (Örnek Öğrenci)">
-            <button class="login-btn" onclick="login()">Enter Writing Lab</button>
-            <button class="login-btn demo-btn" onclick="fillDemo()">AUTO-FILL DEMO (Hızlı Giriş)</button>
+            <div class="instructor-tag">System Owner: Ayşegül ÇINAR</div>
+            <input type="text" id="loginEmail" placeholder="Email Adresiniz">
+            <button class="btn btn-student" onclick="handleLogin('student')">Öğrenci Girişi</button>
+            <button class="btn btn-teacher" onclick="handleLogin('teacher')">Öğretmen Girişi (Ayşegül Çınar)</button>
+            
+            <div style="margin-top:20px; border-top: 1px solid #eee; padding-top:15px;">
+                <button class="btn btn-demo" onclick="fillDemo('student')">Örnek Öğrenci Bilgileriyle Doldur</button>
+                <button class="btn btn-demo" onclick="fillDemo('teacher')">Hoca Bilgileriyle Doldur</button>
+            </div>
         </div>
     </div>
 
     <header id="main-header">
         <div>
-            <h2 style="margin:0; font-size: 18px;">İZMİR ............................. ÜNİVERSİTESİ</h2>
-            <span id="userInfo" style="font-size: 12px; opacity: 0.8;"></span>
+            <h2 id="headerTitle" style="margin:0; font-size: 18px;">İZMİR ............. ÜNİVERSİTESİ</h2>
+            <span id="headerUser" style="font-size: 12px; opacity: 0.8;"></span>
         </div>
-        <div style="text-align: right;">
-            <div style="font-size: 15px; font-weight: bold;">Ayşegül ÇINAR</div>
-            <div style="font-size: 11px; color: var(--ieu-orange);">Program Owner</div>
-        </div>
+        <button class="btn" style="width: auto; background: rgba(255,255,255,0.1); font-size: 12px; padding: 5px 15px;" onclick="location.reload()">Güvenli Çıkış</button>
     </header>
 
-    <main class="dashboard" id="main-dashboard">
-        <section class="workspace">
-            <h3 style="color:var(--ieu-blue)">Writing Workspace</h3>
-            <div style="background:#f0f9ff; padding:15px; border-radius:10px; margin-bottom:20px; font-size:14px; border-left:5px solid var(--ieu-blue)">
-                <strong>Assignment:</strong> Sustainable Cities & Education. (By Ayşegül Çınar)
+    <main class="main-container" id="student-panel">
+        <div class="card">
+            <span class="badge badge-ai">🤖 AI Mentor Aktif</span>
+            <h3 style="margin-top:0">Writing Lab: Draft Phase</h3>
+            <textarea id="essayInput" placeholder="Yazmaya başlayın... AI sizi gerçek zamanlı izliyor."></textarea>
+            <div id="aiFeedback" class="ai-suggestion hidden">
+                <strong>AI Tavsiyesi:</strong> "Very important" yerine "Crucial" kelimesini kullanman akademik puanını artırabilir.
             </div>
-            <textarea id="essayInput" placeholder="Start typing... (Paste disabled)" onpaste="return false;"></textarea>
-            <button class="login-btn" style="margin-top:20px" onclick="analyze()">Submit for Review</button>
-        </section>
+            <button class="btn btn-student" id="submitBtn" onclick="sendToTeacher()">Düzeltmeleri Bitir ve Ayşegül Hoca'ya Gönder</button>
+        </div>
+        <div class="card">
+            <h3>Gelişim Analizim</h3>
+            <div style="height:250px"><canvas id="studentChart"></canvas></div>
+            <div style="margin-top:20px; font-size:14px; color:#666;">
+                • Son 3 ödevin ortalama dürüstlük puanı: <b>%98.5</b>
+            </div>
+        </div>
+    </main>
 
-        <section class="analysis">
-            <h3 style="color:var(--ieu-blue)">Integrity & Progress</h3>
-            <div id="loading" class="hidden"><div class="spinner"></div> Scanning for AI integrity...</div>
-            <div id="security-report" class="security-box hidden"></div>
-            <div id="results"></div>
-            <div style="margin-top:auto; height:200px"><canvas id="progressChart"></canvas></div>
-        </section>
+    <main class="main-container" id="teacher-panel">
+        <div class="card" style="flex:0.4;">
+            <h3 style="margin-top:0">Gelen Ödevler (Review)</h3>
+            <div class="teacher-view-item" onclick="loadEssay('Örnek Öğrenci')">
+                <b>Örnek Öğrenci</b><br>
+                <small>B2 Track - 14.05.2026</small><br>
+                <span class="badge badge-ai">Dürüstlük: %99</span>
+            </div>
+            <div class="teacher-view-item" style="opacity:0.5">
+                <b>Can Yılmaz</b><br><small>B2 Track - 13.05.2026</small>
+            </div>
+        </div>
+        <div class="card">
+            <span class="badge badge-teacher">👩‍🏫 Instructor Review Mode</span>
+            <h3 id="currentStudent">Ödev Detayı: Seçiniz</h3>
+            <div id="essayView" style="padding:15px; background:#f1f5f9; border-radius:12px; flex-grow:1; white-space:pre-wrap;">
+                Lütfen soldan incelenecek ödevi seçin.
+            </div>
+            <div style="display:flex; gap:10px; margin-top:20px;">
+                <button class="btn btn-student" onclick="alert('Ödev Onaylandı!')">Onayla ve Notlandır</button>
+                <button class="btn btn-demo" onclick="alert('Öğrenciye iade edildi.')">Düzeltme İste</button>
+            </div>
+        </div>
     </main>
 
     <script>
-        // Hızlı Giriş Butonu
-        function fillDemo() {
-            document.getElementById('studentEmail').value = "örneköğrenci@üniversite.edu.tr";
-            document.getElementById('studentName').value = "Örnek Öğrenci";
-        }
+        let currentRole = "";
 
-        function login() {
-            const email = document.getElementById('studentEmail').value.trim().toLowerCase();
-            const name = document.getElementById('studentName').value.trim();
-            
-            // Kontrolü esnettik: Boşlukları ve büyük/küçük harfi salla, içeriğe bak
-            if(email.includes("örneköğrenci") || (name.toLocaleLowerCase('tr').includes("örnek"))) {
-                document.getElementById('login-screen').style.display = 'none';
-                document.getElementById('main-header').style.display = 'flex';
-                document.getElementById('main-dashboard').style.display = 'flex';
-                document.getElementById('userInfo').innerText = `Student: Örnek Öğrenci | Section: SFL-B2`;
-                initChart([98, 97, 99, 0], [45, 60, 72, 0]);
+        function fillDemo(role) {
+            if(role === 'student') {
+                document.getElementById('loginEmail').value = "örneköğrenci@üniversite.edu.tr";
             } else {
-                alert("Lütfen demo bilgilerini girin veya AUTO-FILL butonuna basın.");
+                document.getElementById('loginEmail').value = "aysegul.cinar@üniversite.edu.tr";
             }
         }
 
-        function analyze() {
-            const input = document.getElementById('essayInput').value.trim();
-            if(input.length < 10) return;
-            document.getElementById('loading').classList.remove('hidden');
-            document.getElementById('security-report').classList.add('hidden');
+        function handleLogin(role) {
+            const email = document.getElementById('loginEmail').value;
+            if(!email) { alert("Lütfen mail giriniz."); return; }
 
-            setTimeout(() => {
-                document.getElementById('loading').classList.add('hidden');
-                const isGib = /[bcdfghjklmnpqrstvwxyz]{6,}/i.test(input);
-                const report = document.getElementById('security-report');
-                report.classList.remove('hidden');
-                report.className = `security-box ${isGib ? 'warning' : 'safe'}`;
-                report.innerHTML = isGib ? "<strong>🛡️ Warning:</strong> Anomaly detected." : "<strong>🛡️ Verified:</strong> Human-written.";
-                
-                if(!isGib) {
-                    document.getElementById('results').innerHTML = `<div style="padding:10px; border-bottom:1px solid #eee"><b>Score:</b> 8.8/10</div>`;
-                    initChart([98, 97, 99, 100], [45, 60, 72, 88]);
-                }
-            }, 1200);
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('main-header').style.display = 'flex';
+            
+            if(role === 'student') {
+                currentRole = 'student';
+                document.getElementById('student-panel').style.display = 'flex';
+                document.getElementById('headerUser').innerText = `Öğrenci: Örnek Öğrenci | Mentor: Ayşegül ÇINAR`;
+                initChart('studentChart', [95, 98, 97, 99], [40, 55, 65, 75]);
+            } else {
+                currentRole = 'teacher';
+                document.getElementById('teacher-panel').style.display = 'flex';
+                document.getElementById('headerUser').innerText = `Instructor: Ayşegül ÇINAR (Admin)`;
+            }
         }
 
-        function initChart(integrity, achievement) {
-            const ctx = document.getElementById('progressChart').getContext('2d');
-            if(window.myChart) window.myChart.destroy();
-            window.myChart = new Chart(ctx, {
+        // Öğrenci Yazarken AI Düzeltmesi
+        document.getElementById('essayInput').addEventListener('input', function(e) {
+            if(this.value.length > 50) {
+                document.getElementById('aiFeedback').classList.remove('hidden');
+            }
+        });
+
+        function sendToTeacher() {
+            alert("Ödeviniz Ayşegül Çınar'ın sistemine başarıyla gönderildi!");
+            location.reload();
+        }
+
+        function loadEssay(student) {
+            document.getElementById('currentStudent').innerText = "Ödev Detayı: " + student;
+            document.getElementById('essayView').innerText = "Sustainable development is the key for future generations. Education plays a crucial role in this process. People must understand the importance of nature and resources...";
+        }
+
+        function initChart(id, integrity, performance) {
+            const ctx = document.getElementById(id).getContext('2d');
+            new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: ['W1', 'W2', 'W3', 'Current'],
+                    labels: ['W1', 'W2', 'W3', 'W4'],
                     datasets: [
-                        { label: 'Integrity %', data: integrity, borderColor: '#2ecc71', tension: 0.3 },
-                        { label: 'Performance', data: achievement, borderColor: '#FF8C00', tension: 0.3 }
+                        { label: 'Dürüstlük %', data: integrity, borderColor: '#2ecc71', tension: 0.3 },
+                        { label: 'Başarı', data: performance, borderColor: '#FF8C00', tension: 0.3 }
                     ]
                 },
                 options: { maintainAspectRatio: false }
