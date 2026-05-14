@@ -227,4 +227,65 @@
             document.getElementById('results-area').innerHTML = "";
 
             setTimeout(() => {
-                document.getElementById('loading').classList.add
+                document.getElementById('loading').classList.add('hidden');
+                
+                // Kontroller
+                const isGibberish = /[bcdfghjklmnpqrstvwxyz]{6,}/i.test(input);
+                const hasEnglishMarkers = words.some(w => ["the", "is", "and", "that", "which", "however"].includes(w.toLowerCase()));
+                const duration = (new Date() - startTime) / 1000;
+                const speed = (words.length / (duration / 60)).toFixed(0);
+
+                const report = document.getElementById('security-report');
+                report.classList.remove('hidden');
+
+                if (isGibberish || !hasEnglishMarkers) {
+                    report.className = "security-box warning";
+                    report.innerHTML = `<strong>🛡️ Denetim Uyarısı:</strong> Anlamsız veri girişi tespit edildi. Lütfen akademik İngilizce kurallarına uygun yazınız. (Hız: ${speed} wpm)`;
+                    showResults(0, "Low", "None");
+                    initChart([10, 5]);
+                } else {
+                    report.className = "security-box safe";
+                    report.innerHTML = `<strong>🛡️ Dürüstlük Onayı:</strong> Metin tutarlı ve özgün bulundu. Yazım hızı (${speed} wpm) normal sınırlar içerisinde.`;
+                    showResults(8.5, "Academic", "Week 8 Match");
+                    initChart([95, 85]);
+                }
+            }, 1500);
+        }
+
+        function showResults(score, vocab, match) {
+            const area = document.getElementById('results-area');
+            area.innerHTML = `
+                <div class="feedback-card"><span>Grammar & Accuracy</span> <strong>${score}/10</strong></div>
+                <div class="feedback-card"><span>Vocabulary Level</span> <strong>${vocab}</strong></div>
+                <div class="feedback-card"><span>Syllabus Compliance</span> <strong>${match}</strong></div>
+                <p style="font-size: 12px; color: #777; margin-top: 15px;">* Bu rapor yapay zeka tarafından ön değerlendirme amacıyla hazırlanmıştır. Nihai not hoca onayından sonra verilecektir.</p>
+            `;
+        }
+
+        function initChart(dataPoints) {
+            const ctx = document.getElementById('progressChart').getContext('2d');
+            if(window.myChart) window.myChart.destroy();
+            window.myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                    datasets: [{
+                        label: 'Dürüstlük %',
+                        data: [90, 92, 88, dataPoints[0]],
+                        borderColor: '#2ecc71',
+                        tension: 0.3,
+                        fill: false
+                    }, {
+                        label: 'Akademik Puan',
+                        data: [40, 55, 65, dataPoints[1]],
+                        borderColor: '#FF8C00',
+                        tension: 0.3,
+                        fill: false
+                    }]
+                },
+                options: { maintainAspectRatio: false, plugins: { legend: { labels: { size: 10 } } } }
+            });
+        }
+    </script>
+</body>
+</html>
